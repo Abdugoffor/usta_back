@@ -32,6 +32,8 @@ type LanguageService interface {
 	List(ctx context.Context, f language_dto.LanguageFilter, q helper.AdminListQuery) ([]*language_dto.LanguageResponse, bool, error)
 
 	Count(ctx context.Context, f language_dto.LanguageFilter) (int64, error)
+
+	ListActive(ctx context.Context) ([]*language_dto.LanguageResponse, error)
 }
 
 type languageService struct {
@@ -176,4 +178,32 @@ func (s *languageService) List(ctx context.Context, f language_dto.LanguageFilte
 	}
 
 	return items, hasMore, nil
+}
+
+func (s *languageService) ListActive(ctx context.Context) ([]*language_dto.LanguageResponse, error) {
+	rows, err := s.db.Query(ctx, `SELECT id, name, COALESCE(description, ''), is_active, created_at, updated_at FROM languages WHERE is_active = TRUE AND deleted_at IS NULL ORDER BY id`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	items := make([]*language_dto.LanguageResponse, 0)
+
+	for rows.Next() {
+		var r language_dto.LanguageResponse
+
+		if err := rows.Scan(&r.ID, &r.Name, &r.Description, &r.IsActive, &r.CreatedAt, &r.UpdatedAt); err != nil {
+			return nil, err
+		}
+
+		items = append(items, &r)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return items, nil
 }

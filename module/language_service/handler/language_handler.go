@@ -35,6 +35,26 @@ func NewLanguageHandler(router *httprouter.Router, group string, db *pgxpool.Poo
 	}
 
 	router.GET(group+"/count/languages", middleware.CheckRole(h.Count, "admin"))
+
+	router.GET(group+"/active/languages", h.ListActive)
+}
+
+// ListActive godoc
+// @Summary      Faol tillar ro'yxati (public)
+// @Tags         Languages
+// @Produce      json
+// @Success      200 {object} map[string]any
+// @Router       /active/languages [get]
+func (h *languageHandler) ListActive(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	items, err := h.service.ListActive(r.Context())
+
+	if err != nil {
+		helper.WriteInternalError(w, err)
+
+		return
+	}
+
+	helper.WriteJSON(w, http.StatusOK, map[string]any{"data": items})
 }
 
 // List godoc
