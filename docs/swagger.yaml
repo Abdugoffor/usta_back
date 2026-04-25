@@ -1,0 +1,2070 @@
+basePath: /api/v1
+definitions:
+  categorya_dto.CategoryResponse:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      name:
+        additionalProperties:
+          type: string
+        type: object
+      updated_at:
+        type: string
+    type: object
+  categorya_dto.CreateCategoryRequest:
+    properties:
+      is_active:
+        type: boolean
+      name:
+        additionalProperties:
+          type: string
+        type: object
+    required:
+    - name
+    type: object
+  categorya_dto.UpdateCategoryRequest:
+    properties:
+      is_active:
+        type: boolean
+      name:
+        additionalProperties:
+          type: string
+        type: object
+    type: object
+  country_dto.CountryResponse:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      name:
+        additionalProperties:
+          type: string
+        type: object
+      parent_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  country_dto.CreateCountryRequest:
+    properties:
+      is_active:
+        type: boolean
+      name:
+        additionalProperties:
+          type: string
+        type: object
+      parent_id:
+        minimum: 1
+        type: integer
+    required:
+    - name
+    type: object
+  country_dto.UpdateCountryRequest:
+    properties:
+      is_active:
+        type: boolean
+      name:
+        additionalProperties:
+          type: string
+        type: object
+      parent_id:
+        minimum: 1
+        type: integer
+    type: object
+  language_dto.CreateLanguageRequest:
+    properties:
+      description:
+        maxLength: 1000
+        type: string
+      is_active:
+        type: boolean
+      name:
+        maxLength: 255
+        minLength: 2
+        type: string
+    required:
+    - name
+    type: object
+  language_dto.LanguageResponse:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  language_dto.UpdateLanguageRequest:
+    properties:
+      description:
+        maxLength: 1000
+        type: string
+      is_active:
+        type: boolean
+      name:
+        maxLength: 255
+        minLength: 2
+        type: string
+    type: object
+  resume_dto.CategoryShort:
+    properties:
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      name:
+        type: string
+    type: object
+  resume_dto.CreateResumeRequest:
+    properties:
+      adress:
+        maxLength: 500
+        minLength: 3
+        type: string
+      category_ids:
+        items:
+          type: integer
+        type: array
+      contact:
+        maxLength: 255
+        minLength: 5
+        type: string
+      district_id:
+        minimum: 1
+        type: integer
+      experience_year:
+        type: integer
+      is_active:
+        type: boolean
+      mahalla_id:
+        minimum: 1
+        type: integer
+      name:
+        maxLength: 255
+        minLength: 2
+        type: string
+      photo:
+        type: string
+      price:
+        type: integer
+      region_id:
+        minimum: 1
+        type: integer
+      skills:
+        minLength: 2
+        type: string
+      text:
+        minLength: 10
+        type: string
+      title:
+        maxLength: 500
+        minLength: 2
+        type: string
+    required:
+    - adress
+    - contact
+    - name
+    - photo
+    - skills
+    - text
+    - title
+    type: object
+  resume_dto.ResumeResponse:
+    properties:
+      adress:
+        type: string
+      categories:
+        items:
+          $ref: '#/definitions/resume_dto.CategoryShort'
+        type: array
+      contact:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      district_id:
+        type: integer
+      district_name:
+        type: string
+      experience_year:
+        type: integer
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      mahalla_id:
+        type: integer
+      mahalla_name:
+        type: string
+      name:
+        type: string
+      photo:
+        type: string
+      price:
+        type: integer
+      region_id:
+        type: integer
+      region_name:
+        type: string
+      skills:
+        type: string
+      slug:
+        type: string
+      text:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+      views_count:
+        type: integer
+    type: object
+  resume_dto.UpdateResumeRequest:
+    properties:
+      adress:
+        maxLength: 500
+        minLength: 3
+        type: string
+      category_ids:
+        items:
+          type: integer
+        type: array
+      contact:
+        maxLength: 255
+        minLength: 5
+        type: string
+      district_id:
+        minimum: 1
+        type: integer
+      experience_year:
+        type: integer
+      is_active:
+        type: boolean
+      mahalla_id:
+        minimum: 1
+        type: integer
+      name:
+        maxLength: 255
+        minLength: 2
+        type: string
+      photo:
+        type: string
+      price:
+        type: integer
+      region_id:
+        minimum: 1
+        type: integer
+      skills:
+        minLength: 2
+        type: string
+      text:
+        minLength: 10
+        type: string
+      title:
+        maxLength: 500
+        minLength: 2
+        type: string
+    type: object
+  translation_dto.CreateTranslationRequest:
+    properties:
+      is_active:
+        type: boolean
+      name:
+        additionalProperties:
+          type: string
+        type: object
+      slug:
+        maxLength: 150
+        minLength: 2
+        type: string
+    required:
+    - name
+    - slug
+    type: object
+  translation_dto.TranslationKeyResponse:
+    properties:
+      key:
+        type: string
+      lang:
+        type: string
+      value:
+        type: string
+    type: object
+  translation_dto.TranslationResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      name:
+        additionalProperties:
+          type: string
+        type: object
+      slug:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  translation_dto.UpdateTranslationRequest:
+    properties:
+      is_active:
+        type: boolean
+      name:
+        additionalProperties:
+          type: string
+        type: object
+      slug:
+        maxLength: 150
+        minLength: 2
+        type: string
+    type: object
+  user_dto.AuthResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/user_model.User'
+    type: object
+  user_dto.CreateUserRequest:
+    properties:
+      full_name:
+        maxLength: 255
+        minLength: 2
+        type: string
+      is_active:
+        type: boolean
+      password:
+        minLength: 6
+        type: string
+      phone:
+        maxLength: 20
+        minLength: 9
+        type: string
+      photo:
+        maxLength: 255
+        type: string
+      role:
+        enum:
+        - user
+        - employer
+        - admin
+        type: string
+    required:
+    - full_name
+    - password
+    - phone
+    type: object
+  user_dto.LoginRequest:
+    properties:
+      password:
+        type: string
+      phone:
+        type: string
+    required:
+    - password
+    - phone
+    type: object
+  user_dto.RegisterRequest:
+    properties:
+      full_name:
+        maxLength: 255
+        minLength: 2
+        type: string
+      password:
+        minLength: 6
+        type: string
+      phone:
+        maxLength: 20
+        minLength: 9
+        type: string
+      role:
+        enum:
+        - user
+        - employer
+        type: string
+    required:
+    - full_name
+    - password
+    - phone
+    type: object
+  user_dto.UpdateUserRequest:
+    properties:
+      full_name:
+        maxLength: 255
+        minLength: 2
+        type: string
+      is_active:
+        type: boolean
+      password:
+        minLength: 6
+        type: string
+      phone:
+        maxLength: 20
+        minLength: 9
+        type: string
+      photo:
+        maxLength: 255
+        type: string
+      role:
+        enum:
+        - user
+        - employer
+        - admin
+        type: string
+    type: object
+  user_dto.UserResponse:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      phone:
+        type: string
+      photo:
+        type: string
+      role:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  user_model.User:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      phone:
+        type: string
+      photo:
+        type: string
+      role:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  vacancy_dto.CategoryShort:
+    properties:
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      name:
+        type: string
+    type: object
+  vacancy_dto.CreateVacancyRequest:
+    properties:
+      adress:
+        maxLength: 500
+        minLength: 3
+        type: string
+      category_ids:
+        items:
+          type: integer
+        type: array
+      contact:
+        maxLength: 255
+        minLength: 5
+        type: string
+      district_id:
+        minimum: 1
+        type: integer
+      is_active:
+        type: boolean
+      mahalla_id:
+        minimum: 1
+        type: integer
+      name:
+        maxLength: 255
+        minLength: 2
+        type: string
+      price:
+        type: integer
+      region_id:
+        minimum: 1
+        type: integer
+      text:
+        minLength: 10
+        type: string
+      title:
+        maxLength: 500
+        minLength: 2
+        type: string
+    required:
+    - adress
+    - contact
+    - name
+    - text
+    - title
+    type: object
+  vacancy_dto.UpdateVacancyRequest:
+    properties:
+      adress:
+        maxLength: 500
+        minLength: 3
+        type: string
+      category_ids:
+        items:
+          type: integer
+        type: array
+      contact:
+        maxLength: 255
+        minLength: 5
+        type: string
+      district_id:
+        minimum: 1
+        type: integer
+      is_active:
+        type: boolean
+      mahalla_id:
+        minimum: 1
+        type: integer
+      name:
+        maxLength: 255
+        minLength: 2
+        type: string
+      price:
+        type: integer
+      region_id:
+        minimum: 1
+        type: integer
+      text:
+        minLength: 10
+        type: string
+      title:
+        maxLength: 500
+        minLength: 2
+        type: string
+    type: object
+  vacancy_dto.VacancyResponse:
+    properties:
+      adress:
+        type: string
+      categories:
+        items:
+          $ref: '#/definitions/vacancy_dto.CategoryShort'
+        type: array
+      contact:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      district_id:
+        type: integer
+      district_name:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      mahalla_id:
+        type: integer
+      mahalla_name:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+      region_id:
+        type: integer
+      region_name:
+        type: string
+      slug:
+        type: string
+      text:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+      views_count:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Admin paneli uchun CRUD endpointlari (cursor pagination, filter, sort)
+  title: Usta Backend Admin API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Phone+password orqali JWT token olish
+      parameters:
+      - description: Kirish ma'lumotlari
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user_dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_dto.AuthResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Tizimga kirish
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Yangi foydalanuvchi yaratish va JWT token qaytarish
+      parameters:
+      - description: Ro'yxatdan o'tish ma'lumotlari
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user_dto.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/user_dto.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Foydalanuvchi ro'yxatdan o'tish
+      tags:
+      - Auth
+  /categories:
+    get:
+      parameters:
+      - description: Keyset cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Default 10, max 100
+        in: query
+        name: limit
+        type: integer
+      - description: id|name|is_active|created_at|updated_at
+        in: query
+        name: sort_by
+        type: string
+      - description: asc|desc
+        in: query
+        name: sort_order
+        type: string
+      - description: Name JSONB ichida ILIKE
+        in: query
+        name: name
+        type: string
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Kategoriyalar ro'yxati (admin, cursor pagination)
+      tags:
+      - Categories
+    post:
+      consumes:
+      - application/json
+      description: 'name JSONB: har bir faol til kalitlari kiritilishi kerak'
+      parameters:
+      - description: Kategoriya ma'lumotlari
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/categorya_dto.CreateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/categorya_dto.CategoryResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Kategoriya yaratish (admin, ko'p tilli)
+      tags:
+      - Categories
+  /categories/{id}:
+    delete:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Kategoriyani o'chirish (soft delete, admin)
+      tags:
+      - Categories
+    get:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/categorya_dto.CategoryResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Kategoriyani ID bo'yicha olish (admin)
+      tags:
+      - Categories
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Yangilanadigan maydonlar
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/categorya_dto.UpdateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/categorya_dto.CategoryResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Kategoriyani yangilash (admin)
+      tags:
+      - Categories
+  /countries:
+    get:
+      parameters:
+      - description: Keyset cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Default 10, max 100
+        in: query
+        name: limit
+        type: integer
+      - description: id|name|parent_id|is_active|created_at|updated_at
+        in: query
+        name: sort_by
+        type: string
+      - description: asc|desc
+        in: query
+        name: sort_order
+        type: string
+      - description: name JSONB ichida ILIKE
+        in: query
+        name: name
+        type: string
+      - description: Aniq parent_id
+        in: query
+        name: parent_id
+        type: integer
+      - description: true => parent_id NOT NULL, false => root
+        in: query
+        name: has_parent
+        type: boolean
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Countries ro'yxati (admin, cursor pagination)
+      tags:
+      - Countries
+    post:
+      consumes:
+      - application/json
+      description: 'name maydoni JSONB: default + har bir faol til kalitlari majburiy'
+      parameters:
+      - description: Country ma'lumotlari
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/country_dto.CreateCountryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/country_dto.CountryResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Davlat/region yaratish (admin, ko'p tilli)
+      tags:
+      - Countries
+  /countries/{id}:
+    delete:
+      parameters:
+      - description: Country ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Countryni o'chirish (soft delete, admin)
+      tags:
+      - Countries
+    get:
+      parameters:
+      - description: Country ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/country_dto.CountryResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Countryni ID bo'yicha olish (admin)
+      tags:
+      - Countries
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Country ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Yangilanadigan maydonlar
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/country_dto.UpdateCountryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/country_dto.CountryResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Countryni yangilash (admin)
+      tags:
+      - Countries
+  /languages:
+    get:
+      parameters:
+      - description: Keyset cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Default 10, max 100
+        in: query
+        name: limit
+        type: integer
+      - description: id|name|is_active|created_at|updated_at
+        in: query
+        name: sort_by
+        type: string
+      - description: asc|desc
+        in: query
+        name: sort_order
+        type: string
+      - description: Til kodi bo'yicha qidirish (ILIKE)
+        in: query
+        name: name
+        type: string
+      - description: Tavsif bo'yicha qidirish
+        in: query
+        name: description
+        type: string
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Tillar ro'yxati (admin, cursor pagination)
+      tags:
+      - Languages
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Til ma'lumotlari
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/language_dto.CreateLanguageRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/language_dto.LanguageResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Yangi til qo'shish (admin)
+      tags:
+      - Languages
+  /languages/{id}:
+    delete:
+      parameters:
+      - description: Language ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Tilni o'chirish (soft delete, admin)
+      tags:
+      - Languages
+    get:
+      parameters:
+      - description: Language ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/language_dto.LanguageResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Tilni ID bo'yicha olish (admin)
+      tags:
+      - Languages
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Language ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Yangilanadigan maydonlar
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/language_dto.UpdateLanguageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/language_dto.LanguageResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Tilni yangilash (admin)
+      tags:
+      - Languages
+  /resumes:
+    get:
+      parameters:
+      - description: Keyset cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Default 10, max 100
+        in: query
+        name: limit
+        type: integer
+      - description: id|price|experience_year
+        in: query
+        name: sort_by
+        type: string
+      - description: asc|desc
+        in: query
+        name: sort_order
+        type: string
+      - description: Name ILIKE
+        in: query
+        name: name
+        type: string
+      - description: Title ILIKE
+        in: query
+        name: title
+        type: string
+      - description: Name+title+skills+text bo'yicha
+        in: query
+        name: search
+        type: string
+      - description: Egasi ID
+        in: query
+        name: user_id
+        type: integer
+      - description: Region ID
+        in: query
+        name: region_id
+        type: integer
+      - description: District ID
+        in: query
+        name: district_id
+        type: integer
+      - description: Mahalla ID
+        in: query
+        name: mahalla_id
+        type: integer
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      - description: Minimal narx
+        in: query
+        name: min_price
+        type: integer
+      - description: Maksimal narx
+        in: query
+        name: max_price
+        type: integer
+      - description: Minimal tajriba (yil)
+        in: query
+        name: min_experience
+        type: integer
+      - description: Aniq bitta kategoriya
+        in: query
+        name: category_id
+        type: integer
+      - description: Bir nechta kategoriya, vergulli (1,2,3)
+        in: query
+        name: category_ids
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Resumelar ro'yxati (cursor pagination, public)
+      tags:
+      - Resumes
+    post:
+      consumes:
+      - application/json
+      description: category_ids — bir nechta kategoriya berish mumkin
+      parameters:
+      - description: Resume
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/resume_dto.CreateResumeRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/resume_dto.ResumeResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Resume yaratish (auth user)
+      tags:
+      - Resumes
+  /resumes/{id}:
+    delete:
+      parameters:
+      - description: Resume ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Resumeni o'chirish (egasi yoki admin)
+      tags:
+      - Resumes
+    put:
+      consumes:
+      - application/json
+      description: category_ids berilsa — to'liq almashtiriladi
+      parameters:
+      - description: Resume ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Yangilanadigan maydonlar
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/resume_dto.UpdateResumeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/resume_dto.ResumeResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Resumeni yangilash (egasi yoki admin)
+      tags:
+      - Resumes
+  /resumes/{slug}:
+    get:
+      parameters:
+      - description: Resume slug
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/resume_dto.ResumeResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Resumeni slug bo'yicha olish (public)
+      tags:
+      - Resumes
+  /t:
+    get:
+      description: slug+lang bo'yicha qidiradi; topilmasa default; hech narsa bo'lmasa
+        key qaytadi
+      parameters:
+      - description: Translation slug
+        in: query
+        name: key
+        required: true
+        type: string
+      - description: Til kodi (default 'default')
+        in: query
+        name: lang
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/translation_dto.TranslationKeyResponse'
+      summary: Frontend uchun bitta tarjimani olish (public)
+      tags:
+      - Translations
+  /translations:
+    get:
+      parameters:
+      - description: Keyset cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Default 10, max 100
+        in: query
+        name: limit
+        type: integer
+      - description: id|slug|name|is_active|created_at|updated_at
+        in: query
+        name: sort_by
+        type: string
+      - description: asc|desc
+        in: query
+        name: sort_order
+        type: string
+      - description: Slug bo'yicha ILIKE
+        in: query
+        name: slug
+        type: string
+      - description: Name JSONB ichida ILIKE
+        in: query
+        name: name
+        type: string
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Tarjimalar ro'yxati (admin, cursor pagination)
+      tags:
+      - Translations
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Tarjima ma'lumotlari
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/translation_dto.CreateTranslationRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/translation_dto.TranslationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Tarjima yaratish (admin, ko'p tilli)
+      tags:
+      - Translations
+  /translations/{id}:
+    delete:
+      parameters:
+      - description: Translation ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Tarjimani o'chirish (soft delete, admin)
+      tags:
+      - Translations
+    get:
+      parameters:
+      - description: Translation ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/translation_dto.TranslationResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Tarjimani ID bo'yicha olish (admin)
+      tags:
+      - Translations
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Translation ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Yangilanadigan maydonlar
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/translation_dto.UpdateTranslationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/translation_dto.TranslationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Tarjimani yangilash (admin)
+      tags:
+      - Translations
+  /users:
+    get:
+      parameters:
+      - description: Keyset cursor (next_cursor dan olingan)
+        in: query
+        name: cursor
+        type: string
+      - description: Sahifa hajmi (default 10, max 100)
+        in: query
+        name: limit
+        type: integer
+      - description: id|full_name|phone|role|is_active|created_at|updated_at
+        in: query
+        name: sort_by
+        type: string
+      - description: asc|desc (default desc)
+        in: query
+        name: sort_order
+        type: string
+      - description: Ism bo'yicha qidirish (ILIKE)
+        in: query
+        name: full_name
+        type: string
+      - description: Telefon bo'yicha qidirish (ILIKE)
+        in: query
+        name: phone
+        type: string
+      - description: Aniq rol (user|employer|admin)
+        in: query
+        name: role
+        type: string
+      - description: Holat filtri
+        in: query
+        name: is_active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Foydalanuvchilar ro'yxati (admin, cursor pagination)
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User ma'lumotlari
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user_dto.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/user_dto.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Foydalanuvchi yaratish (admin)
+      tags:
+      - Users
+  /users/{id}:
+    delete:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Foydalanuvchini o'chirish (soft delete, admin)
+      tags:
+      - Users
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_dto.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Foydalanuvchini ID bo'yicha olish (admin)
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Yangilanadigan maydonlar
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user_dto.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_dto.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Foydalanuvchini yangilash (admin)
+      tags:
+      - Users
+  /vacancies:
+    get:
+      parameters:
+      - description: Keyset cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Default 10, max 100
+        in: query
+        name: limit
+        type: integer
+      - description: id|price
+        in: query
+        name: sort_by
+        type: string
+      - description: asc|desc
+        in: query
+        name: sort_order
+        type: string
+      - description: Name ILIKE
+        in: query
+        name: name
+        type: string
+      - description: Title ILIKE
+        in: query
+        name: title
+        type: string
+      - description: Name+title+text bo'yicha qidirish
+        in: query
+        name: search
+        type: string
+      - description: Egasi ID
+        in: query
+        name: user_id
+        type: integer
+      - description: Region ID
+        in: query
+        name: region_id
+        type: integer
+      - description: District ID
+        in: query
+        name: district_id
+        type: integer
+      - description: Mahalla ID
+        in: query
+        name: mahalla_id
+        type: integer
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      - description: Minimal narx
+        in: query
+        name: min_price
+        type: integer
+      - description: Maksimal narx
+        in: query
+        name: max_price
+        type: integer
+      - description: Aniq bitta kategoriya
+        in: query
+        name: category_id
+        type: integer
+      - description: Bir nechta kategoriya, vergulli (1,2,3)
+        in: query
+        name: category_ids
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Vakansiyalar ro'yxati (cursor pagination, public)
+      tags:
+      - Vacancies
+    post:
+      consumes:
+      - application/json
+      description: category_ids — bir nechta kategoriya berish mumkin
+      parameters:
+      - description: Vakansiya
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/vacancy_dto.CreateVacancyRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/vacancy_dto.VacancyResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Vakansiya yaratish (auth user)
+      tags:
+      - Vacancies
+  /vacancies/{id}:
+    delete:
+      parameters:
+      - description: Vacancy ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Vakansiyani o'chirish (egasi yoki admin)
+      tags:
+      - Vacancies
+    put:
+      consumes:
+      - application/json
+      description: category_ids berilsa — to'liq almashtiriladi
+      parameters:
+      - description: Vacancy ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Yangilanadigan maydonlar
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/vacancy_dto.UpdateVacancyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/vacancy_dto.VacancyResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Vakansiyani yangilash (egasi yoki admin)
+      tags:
+      - Vacancies
+  /vacancies/{slug}:
+    get:
+      parameters:
+      - description: Vacancy slug
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/vacancy_dto.VacancyResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Vakansiyani slug bo'yicha olish (public)
+      tags:
+      - Vacancies
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
