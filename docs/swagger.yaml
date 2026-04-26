@@ -1600,7 +1600,7 @@ paths:
           schema:
             additionalProperties: true
             type: object
-      summary: Resumelar ro'yxati (cursor pagination, public)
+      summary: Resumelar ro'yxati (cursor pagination, auth user)
       tags:
       - Resumes
     post:
@@ -1635,6 +1635,108 @@ paths:
       security:
       - BearerAuth: []
       summary: Resume yaratish (auth user)
+      tags:
+      - Resumes
+  /resumes-client:
+    get:
+      parameters:
+      - description: Keyset cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Default 10, max 100
+        in: query
+        name: limit
+        type: integer
+      - description: id|price|experience_year
+        in: query
+        name: sort_by
+        type: string
+      - description: asc|desc
+        in: query
+        name: sort_order
+        type: string
+      - description: Name ILIKE
+        in: query
+        name: name
+        type: string
+      - description: Title ILIKE
+        in: query
+        name: title
+        type: string
+      - description: Name+title+skills+text bo'yicha
+        in: query
+        name: search
+        type: string
+      - description: Region ID
+        in: query
+        name: region_id
+        type: integer
+      - description: District ID
+        in: query
+        name: district_id
+        type: integer
+      - description: Mahalla ID
+        in: query
+        name: mahalla_id
+        type: integer
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      - description: Minimal narx
+        in: query
+        name: min_price
+        type: integer
+      - description: Maksimal narx
+        in: query
+        name: max_price
+        type: integer
+      - description: Minimal tajriba (yil)
+        in: query
+        name: min_experience
+        type: integer
+      - description: Aniq bitta kategoriya
+        in: query
+        name: category_id
+        type: integer
+      - description: Bir nechta kategoriya, vergulli (1,2,3)
+        in: query
+        name: category_ids
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Resumelar ro'yxati (cursor pagination, public)
+      tags:
+      - Resumes
+  /resumes-client/{slug}:
+    get:
+      parameters:
+      - description: Resume slug
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/resume_dto.ResumeResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Resumeni slug bo'yicha olish (public)
       tags:
       - Resumes
   /resumes/{id}:
@@ -1714,30 +1816,6 @@ paths:
       security:
       - BearerAuth: []
       summary: Resumeni yangilash (egasi yoki admin)
-      tags:
-      - Resumes
-  /resumes/{slug}:
-    get:
-      parameters:
-      - description: Resume slug
-        in: path
-        name: slug
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/resume_dto.ResumeResponse'
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Resumeni slug bo'yicha olish (public)
       tags:
       - Resumes
   /t:
@@ -2263,7 +2341,7 @@ paths:
           schema:
             additionalProperties: true
             type: object
-      summary: Vakansiyalar ro'yxati (cursor pagination, public)
+      summary: Vakansiyalar ro'yxati (cursor pagination, auth user)
       tags:
       - Vacancies
     post:
@@ -2298,6 +2376,80 @@ paths:
       security:
       - BearerAuth: []
       summary: Vakansiya yaratish (auth user)
+      tags:
+      - Vacancies
+  /vacancies-client:
+    get:
+      parameters:
+      - description: Keyset cursor
+        in: query
+        name: cursor
+        type: string
+      - description: Default 10, max 100
+        in: query
+        name: limit
+        type: integer
+      - description: id|price
+        in: query
+        name: sort_by
+        type: string
+      - description: asc|desc
+        in: query
+        name: sort_order
+        type: string
+      - description: Name ILIKE
+        in: query
+        name: name
+        type: string
+      - description: Title ILIKE
+        in: query
+        name: title
+        type: string
+      - description: Name+title+text bo'yicha qidirish
+        in: query
+        name: search
+        type: string
+      - description: Region ID
+        in: query
+        name: region_id
+        type: integer
+      - description: District ID
+        in: query
+        name: district_id
+        type: integer
+      - description: Mahalla ID
+        in: query
+        name: mahalla_id
+        type: integer
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      - description: Minimal narx
+        in: query
+        name: min_price
+        type: integer
+      - description: Maksimal narx
+        in: query
+        name: max_price
+        type: integer
+      - description: Aniq bitta kategoriya
+        in: query
+        name: category_id
+        type: integer
+      - description: Bir nechta kategoriya, vergulli (1,2,3)
+        in: query
+        name: category_ids
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Vakansiyalar ro'yxati (cursor pagination, public)
       tags:
       - Vacancies
   /vacancies/{id}:

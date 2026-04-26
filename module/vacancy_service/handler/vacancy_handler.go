@@ -25,9 +25,7 @@ func NewVacancyHandler(router *httprouter.Router, group string, db *pgxpool.Pool
 	{
 		router.POST(routes, middleware.CheckRole(h.Create))
 
-		router.GET(routes, h.List)
-
-		router.GET(routes+"/:slug", h.GetBySlug)
+		router.GET(routes, middleware.CheckRole(h.List))
 
 		router.PUT(routes+"/:id", middleware.CheckRole(h.Update))
 
@@ -90,7 +88,7 @@ func (h *vacancyHandler) Create(w http.ResponseWriter, r *http.Request, _ httpro
 }
 
 // List godoc
-// @Summary      Vakansiyalar ro'yxati (cursor pagination, public)
+// @Summary      Vakansiyalar ro'yxati (cursor pagination, auth user)
 // @Tags         Vacancies
 // @Produce      json
 // @Param        cursor       query string false "Keyset cursor"
@@ -112,6 +110,15 @@ func (h *vacancyHandler) Create(w http.ResponseWriter, r *http.Request, _ httpro
 // @Success      200 {object} map[string]any
 // @Router       /vacancies [get]
 func (h *vacancyHandler) List(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	userID := middleware.GetUserID(r)
+	{
+		if userID == 0 {
+			helper.WriteError(w, http.StatusUnauthorized, "unauthorized")
+
+			return
+		}
+	}
+
 	q := r.URL.Query()
 
 	cursor, limit := helper.ParseCursorPayload(r)
@@ -131,6 +138,13 @@ func (h *vacancyHandler) List(w http.ResponseWriter, r *http.Request, _ httprout
 		MaxPrice:    helper.QueryInt64(r, "max_price"),
 		CategoryID:  helper.QueryInt64(r, "category_id"),
 		CategoryIDs: helper.ParseIDList(q.Get("category_ids"), 20),
+	}
+
+	role := middleware.GetRole(r)
+	{
+		if role != "admin" {
+			f.UserID = &userID
+		}
 	}
 
 	items, hasMore, err := h.service.List(r.Context(), f, cursor, limit)
@@ -204,34 +218,6 @@ func (h *vacancyHandler) Count(w http.ResponseWriter, r *http.Request, _ httprou
 	}
 
 	helper.WriteJSON(w, http.StatusOK, map[string]int64{"total": total})
-}
-
-// GetBySlug godoc
-// @Summary      Vakansiyani slug bo'yicha olish (public)
-// @Tags         Vacancies
-// @Produce      json
-// @Param        slug path string true "Vacancy slug"
-// @Success      200 {object} vacancy_dto.VacancyResponse
-// @Failure      404 {object} map[string]string
-// @Router       /vacancies/{slug} [get]
-func (h *vacancyHandler) GetBySlug(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	slug := ps.ByName("slug")
-
-	if slug == "" {
-		helper.WriteError(w, http.StatusBadRequest, "invalid slug")
-
-		return
-	}
-
-	resp, err := h.service.GetBySlug(r.Context(), slug)
-
-	if err != nil {
-		helper.WriteError(w, http.StatusNotFound, "vacancy not found")
-
-		return
-	}
-
-	helper.WriteJSON(w, http.StatusOK, resp)
 }
 
 // Update godoc

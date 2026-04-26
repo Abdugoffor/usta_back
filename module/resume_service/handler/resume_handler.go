@@ -25,9 +25,7 @@ func NewResumeHandler(router *httprouter.Router, group string, db *pgxpool.Pool)
 	{
 		router.POST(routes, middleware.CheckRole(h.Create))
 
-		router.GET(routes, h.List)
-
-		router.GET(routes+"/:slug", h.GetBySlug)
+		router.GET(routes, middleware.CheckRole(h.List))
 
 		router.PUT(routes+"/:id", middleware.CheckRole(h.Update))
 
@@ -90,7 +88,7 @@ func (h *resumeHandler) Create(w http.ResponseWriter, r *http.Request, _ httprou
 }
 
 // List godoc
-// @Summary      Resumelar ro'yxati (cursor pagination, public)
+// @Summary      Resumelar ro'yxati (cursor pagination, auth user)
 // @Tags         Resumes
 // @Produce      json
 // @Param        cursor         query string false "Keyset cursor"
@@ -113,6 +111,15 @@ func (h *resumeHandler) Create(w http.ResponseWriter, r *http.Request, _ httprou
 // @Success      200 {object} map[string]any
 // @Router       /resumes [get]
 func (h *resumeHandler) List(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	userID := middleware.GetUserID(r)
+	{
+		if userID == 0 {
+			helper.WriteError(w, http.StatusUnauthorized, "unauthorized")
+
+			return
+		}
+	}
+
 	q := r.URL.Query()
 
 	cursor, limit := helper.ParseCursorPayload(r)
@@ -133,6 +140,13 @@ func (h *resumeHandler) List(w http.ResponseWriter, r *http.Request, _ httproute
 		MinExperience: helper.QueryInt(r, "min_experience"),
 		CategoryID:    helper.QueryInt64(r, "category_id"),
 		CategoryIDs:   helper.ParseIDList(q.Get("category_ids"), 20),
+	}
+
+	role := middleware.GetRole(r)
+	{
+		if role != "admin" {
+			f.UserID = &userID
+		}
 	}
 
 	items, hasMore, err := h.service.List(r.Context(), f, cursor, limit)
@@ -215,34 +229,6 @@ func (h *resumeHandler) Count(w http.ResponseWriter, r *http.Request, _ httprout
 	}
 
 	helper.WriteJSON(w, http.StatusOK, map[string]int64{"total": total})
-}
-
-// GetBySlug godoc
-// @Summary      Resumeni slug bo'yicha olish (public)
-// @Tags         Resumes
-// @Produce      json
-// @Param        slug path string true "Resume slug"
-// @Success      200 {object} resume_dto.ResumeResponse
-// @Failure      404 {object} map[string]string
-// @Router       /resumes/{slug} [get]
-func (h *resumeHandler) GetBySlug(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	slug := ps.ByName("slug")
-
-	if slug == "" {
-		helper.WriteError(w, http.StatusBadRequest, "invalid slug")
-
-		return
-	}
-
-	resp, err := h.service.GetBySlug(r.Context(), slug)
-
-	if err != nil {
-		helper.WriteError(w, http.StatusNotFound, "resume not found")
-
-		return
-	}
-
-	helper.WriteJSON(w, http.StatusOK, resp)
 }
 
 // Update godoc

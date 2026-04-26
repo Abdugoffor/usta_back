@@ -1423,7 +1423,7 @@ const docTemplate = `{
                 "tags": [
                     "Resumes"
                 ],
-                "summary": "Resumelar ro'yxati (cursor pagination, public)",
+                "summary": "Resumelar ro'yxati (cursor pagination, auth user)",
                 "parameters": [
                     {
                         "type": "string",
@@ -1592,6 +1592,161 @@ const docTemplate = `{
                 }
             }
         },
+        "/resumes-client": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Resumes"
+                ],
+                "summary": "Resumelar ro'yxati (cursor pagination, public)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Keyset cursor",
+                        "name": "cursor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Default 10, max 100",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id|price|experience_year",
+                        "name": "sort_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "asc|desc",
+                        "name": "sort_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Name ILIKE",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Title ILIKE",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Name+title+skills+text bo'yicha",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Region ID",
+                        "name": "region_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "District ID",
+                        "name": "district_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Mahalla ID",
+                        "name": "mahalla_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Holat",
+                        "name": "is_active",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimal narx",
+                        "name": "min_price",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Maksimal narx",
+                        "name": "max_price",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimal tajriba (yil)",
+                        "name": "min_experience",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Aniq bitta kategoriya",
+                        "name": "category_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bir nechta kategoriya, vergulli (1,2,3)",
+                        "name": "category_ids",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/resumes-client/{slug}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Resumes"
+                ],
+                "summary": "Resumeni slug bo'yicha olish (public)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Resume slug",
+                        "name": "slug",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resume_dto.ResumeResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/resumes/{id}": {
             "put": {
                 "security": [
@@ -1701,43 +1856,6 @@ const docTemplate = `{
                             "additionalProperties": {
                                 "type": "string"
                             }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/resumes/{slug}": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Resumes"
-                ],
-                "summary": "Resumeni slug bo'yicha olish (public)",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Resume slug",
-                        "name": "slug",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/resume_dto.ResumeResponse"
                         }
                     },
                     "404": {
@@ -2457,7 +2575,7 @@ const docTemplate = `{
                 "tags": [
                     "Vacancies"
                 ],
-                "summary": "Vakansiyalar ro'yxati (cursor pagination, public)",
+                "summary": "Vakansiyalar ro'yxati (cursor pagination, auth user)",
                 "parameters": [
                     {
                         "type": "string",
@@ -2612,6 +2730,118 @@ const docTemplate = `{
                     },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/vacancies-client": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Vacancies"
+                ],
+                "summary": "Vakansiyalar ro'yxati (cursor pagination, public)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Keyset cursor",
+                        "name": "cursor",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Default 10, max 100",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "id|price",
+                        "name": "sort_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "asc|desc",
+                        "name": "sort_order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Name ILIKE",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Title ILIKE",
+                        "name": "title",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Name+title+text bo'yicha qidirish",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Region ID",
+                        "name": "region_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "District ID",
+                        "name": "district_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Mahalla ID",
+                        "name": "mahalla_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Holat",
+                        "name": "is_active",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimal narx",
+                        "name": "min_price",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Maksimal narx",
+                        "name": "max_price",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Aniq bitta kategoriya",
+                        "name": "category_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Bir nechta kategoriya, vergulli (1,2,3)",
+                        "name": "category_ids",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "type": "object",
                             "additionalProperties": true

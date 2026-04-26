@@ -49,10 +49,11 @@ func CheckRole(next httprouter.Handle, roles ...string) httprouter.Handle {
 		}
 
 		if len(roles) > 0 {
+			userRole := strings.ToLower(strings.TrimSpace(claims.Role))
 			allowed := false
 
 			for _, role := range roles {
-				if strings.TrimSpace(role) == claims.Role {
+				if strings.ToLower(strings.TrimSpace(role)) == userRole {
 					allowed = true
 					break
 				}
@@ -64,15 +65,15 @@ func CheckRole(next httprouter.Handle, roles ...string) httprouter.Handle {
 			}
 		}
 
-		ctx := context.WithValue(r.Context(), CtxUserID, claims.UserID)
+		ctx := context.WithValue(r.Context(), CtxUserID, int64(claims.UserID))
 		ctx = context.WithValue(ctx, CtxRole, claims.Role)
 
 		next(w, r.WithContext(ctx), ps)
 	}
 }
 
-func GetUserID(r *http.Request) int {
-	v, _ := r.Context().Value(CtxUserID).(int)
+func GetUserID(r *http.Request) int64 {
+	v, _ := r.Context().Value(CtxUserID).(int64)
 	return v
 }
 
