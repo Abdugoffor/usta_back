@@ -625,6 +625,62 @@ info:
   title: Usta Backend Admin API
   version: "1.0"
 paths:
+  /active/categories:
+    get:
+      description: lang berilgan tildagi nomni qaytaradi; bo'lmasa default
+      parameters:
+      - description: 'Til kodi (masalan: uz, ru, en)'
+        in: query
+        name: lang
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Faol kategoriyalar ro'yxati (public, til bo'yicha)
+      tags:
+      - Categories
+  /active/countries:
+    get:
+      description: parent_id berilmasa default 196 ishlatiladi; lang berilgan tildagi
+        nomni qaytaradi, bo'lmasa default
+      parameters:
+      - description: 'Parent ID (default: 196)'
+        in: query
+        name: parent_id
+        type: integer
+      - description: 'Til kodi (masalan: uz, ru, en)'
+        in: query
+        name: lang
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Faol countries ro'yxati (public, til bo'yicha)
+      tags:
+      - Countries
+  /active/languages:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Faol tillar ro'yxati (public)
+      tags:
+      - Languages
   /auth/login:
     post:
       consumes:
@@ -850,6 +906,292 @@ paths:
       summary: Kategoriyani yangilash (admin)
       tags:
       - Categories
+  /count/categories:
+    get:
+      parameters:
+      - description: Name JSONB ichida ILIKE
+        in: query
+        name: name
+        type: string
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              format: int64
+              type: integer
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Kategoriyalar soni (admin)
+      tags:
+      - Categories
+  /count/countries:
+    get:
+      parameters:
+      - description: Name JSONB ichida ILIKE
+        in: query
+        name: name
+        type: string
+      - description: Aniq parent_id
+        in: query
+        name: parent_id
+        type: integer
+      - description: true => parent_id NOT NULL
+        in: query
+        name: has_parent
+        type: boolean
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              format: int64
+              type: integer
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Countries soni (admin)
+      tags:
+      - Countries
+  /count/languages:
+    get:
+      parameters:
+      - description: Til kodi (ILIKE)
+        in: query
+        name: name
+        type: string
+      - description: Tavsif (ILIKE)
+        in: query
+        name: description
+        type: string
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              format: int64
+              type: integer
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Tillar soni (admin)
+      tags:
+      - Languages
+  /count/resumes:
+    get:
+      parameters:
+      - description: Name ILIKE
+        in: query
+        name: name
+        type: string
+      - description: Title ILIKE
+        in: query
+        name: title
+        type: string
+      - description: Name+title+skills+text
+        in: query
+        name: search
+        type: string
+      - description: Egasi ID
+        in: query
+        name: user_id
+        type: integer
+      - description: Region ID
+        in: query
+        name: region_id
+        type: integer
+      - description: District ID
+        in: query
+        name: district_id
+        type: integer
+      - description: Mahalla ID
+        in: query
+        name: mahalla_id
+        type: integer
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      - description: Minimal narx
+        in: query
+        name: min_price
+        type: integer
+      - description: Maksimal narx
+        in: query
+        name: max_price
+        type: integer
+      - description: Minimal tajriba
+        in: query
+        name: min_experience
+        type: integer
+      - description: Aniq bitta kategoriya
+        in: query
+        name: category_id
+        type: integer
+      - description: Vergulli (1,2,3)
+        in: query
+        name: category_ids
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              format: int64
+              type: integer
+            type: object
+      summary: Resumelar soni (public)
+      tags:
+      - Resumes
+  /count/translations:
+    get:
+      parameters:
+      - description: Slug ILIKE
+        in: query
+        name: slug
+        type: string
+      - description: Name JSONB ICHIDA ILIKE
+        in: query
+        name: name
+        type: string
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              format: int64
+              type: integer
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Tarjimalar soni (admin)
+      tags:
+      - Translations
+  /count/users:
+    get:
+      parameters:
+      - description: Ism bo'yicha qidirish (ILIKE)
+        in: query
+        name: full_name
+        type: string
+      - description: Telefon bo'yicha qidirish (ILIKE)
+        in: query
+        name: phone
+        type: string
+      - description: Aniq rol
+        in: query
+        name: role
+        type: string
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              format: int64
+              type: integer
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Foydalanuvchilar soni (admin)
+      tags:
+      - Users
+  /count/vacancies:
+    get:
+      parameters:
+      - description: Name ILIKE
+        in: query
+        name: name
+        type: string
+      - description: Title ILIKE
+        in: query
+        name: title
+        type: string
+      - description: Name+title+text
+        in: query
+        name: search
+        type: string
+      - description: Egasi ID
+        in: query
+        name: user_id
+        type: integer
+      - description: Region ID
+        in: query
+        name: region_id
+        type: integer
+      - description: District ID
+        in: query
+        name: district_id
+        type: integer
+      - description: Mahalla ID
+        in: query
+        name: mahalla_id
+        type: integer
+      - description: Holat
+        in: query
+        name: is_active
+        type: boolean
+      - description: Minimal narx
+        in: query
+        name: min_price
+        type: integer
+      - description: Maksimal narx
+        in: query
+        name: max_price
+        type: integer
+      - description: Aniq bitta kategoriya
+        in: query
+        name: category_id
+        type: integer
+      - description: Vergulli (1,2,3)
+        in: query
+        name: category_ids
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              format: int64
+              type: integer
+            type: object
+      summary: Vakansiyalar soni (public)
+      tags:
+      - Vacancies
   /countries:
     get:
       parameters:

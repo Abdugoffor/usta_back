@@ -9,6 +9,7 @@ import (
 	country_service "main_service/module/country_service/service"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/julienschmidt/httprouter"
@@ -35,6 +36,37 @@ func NewCountryHandler(router *httprouter.Router, group string, db *pgxpool.Pool
 	}
 
 	router.GET(group+"/count/countries", middleware.CheckRole(h.Count, "admin"))
+
+	router.GET(group+"/active/countries", h.ListActive)
+}
+
+// ListActive godoc
+// @Summary      Faol countries ro'yxati (public, til bo'yicha)
+// @Description  parent_id berilmasa default 196 ishlatiladi; lang berilgan tildagi nomni qaytaradi, bo'lmasa default
+// @Tags         Countries
+// @Produce      json
+// @Param        parent_id query int    false "Parent ID (default: 196)"
+// @Param        lang      query string false "Til kodi (masalan: uz, ru, en)"
+// @Success      200 {object} map[string]any
+// @Router       /active/countries [get]
+func (h *countryHandler) ListActive(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	parentID := int64(196)
+
+	if v := helper.QueryInt64(r, "parent_id"); v != nil && *v > 0 {
+		parentID = *v
+	}
+
+	lang := strings.ToLower(strings.TrimSpace(r.URL.Query().Get("lang")))
+
+	items, err := h.service.ListActive(r.Context(), parentID, lang)
+
+	if err != nil {
+		helper.WriteInternalError(w, err)
+
+		return
+	}
+
+	helper.WriteJSON(w, http.StatusOK, map[string]any{"data": items})
 }
 
 func (h *countryHandler) checkActiveLangs(ctx context.Context, name map[string]string) (map[string]string, error) {

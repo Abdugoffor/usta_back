@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"main_service/helper"
 	categorya_dto "main_service/module/categorya_service/dto"
+	"strings"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -31,6 +32,8 @@ type CategoryService interface {
 	List(ctx context.Context, f categorya_dto.CategoryFilter, q helper.AdminListQuery) ([]*categorya_dto.CategoryResponse, bool, error)
 
 	Count(ctx context.Context, f categorya_dto.CategoryFilter) (int64, error)
+
+	ListActive(ctx context.Context, lang string) ([]*categorya_dto.CategoryActiveResponse, error)
 
 	GetActiveLanguages(ctx context.Context) ([]string, error)
 }
@@ -170,6 +173,53 @@ func (s *categoryService) Count(ctx context.Context, f categorya_dto.CategoryFil
 	err := s.db.QueryRow(ctx, `SELECT COUNT(*) FROM categories c WHERE `+categoryListWhere, categoryListArgs(f)...).Scan(&total)
 
 	return total, err
+}
+
+func (s *categoryService) ListActive(ctx context.Context, lang string) ([]*categorya_dto.CategoryActiveResponse, error) {
+	rows, err := s.db.Query(ctx, `SELECT id, name FROM categories WHERE deleted_at IS NULL AND is_active = TRUE ORDER BY (name->>'default') ASC NULLS LAST, id ASC`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	lang = strings.ToLower(strings.TrimSpace(lang))
+
+	items := make([]*categorya_dto.CategoryActiveResponse, 0)
+
+	for rows.Next() {
+		var (
+			id        int64
+			nameBytes []byte
+		)
+
+		if err := rows.Scan(&id, &nameBytes); err != nil {
+			return nil, err
+		}
+
+		name := unmarshalName(nameBytes)
+
+		value := ""
+
+		if lang != "" {
+			if v, ok := name[lang]; ok && strings.TrimSpace(v) != "" {
+				value = v
+			}
+		}
+
+		if value == "" {
+			value = strings.TrimSpace(name["default"])
+		}
+
+		items = append(items, &categorya_dto.CategoryActiveResponse{ID: id, Name: value})
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return items, nil
 }
 
 func (s *categoryService) List(ctx context.Context, f categorya_dto.CategoryFilter, q helper.AdminListQuery) ([]*categorya_dto.CategoryResponse, bool, error) {

@@ -30,3 +30,9 @@ type CountryResponse struct {
 	UpdatedAt time.Time         `json:"updated_at"`
 	DeletedAt *time.Time        `json:"deleted_at,omitempty"`
 }
+
+type CountryActiveResponse struct {
+	ID       int64  `json:"id"`
+	ParentID *int64 `json:"parent_id"`
+	Name     string `json:"name"`
+}

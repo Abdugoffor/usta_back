@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"main_service/helper"
 	country_dto "main_service/module/country_service/dto"
+	"strings"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -32,6 +33,8 @@ type CountryService interface {
 	List(ctx context.Context, f country_dto.CountryFilter, q helper.AdminListQuery) ([]*country_dto.CountryResponse, bool, error)
 
 	Count(ctx context.Context, f country_dto.CountryFilter) (int64, error)
+
+	ListActive(ctx context.Context, parentID int64, lang string) ([]*country_dto.CountryActiveResponse, error)
 
 	GetActiveLanguages(ctx context.Context) ([]string, error)
 }
@@ -171,6 +174,54 @@ func (s *countryService) Count(ctx context.Context, f country_dto.CountryFilter)
 	err := s.db.QueryRow(ctx, `SELECT COUNT(*) FROM countries c WHERE `+countryListWhere, countryListArgs(f)...).Scan(&total)
 
 	return total, err
+}
+
+func (s *countryService) ListActive(ctx context.Context, parentID int64, lang string) ([]*country_dto.CountryActiveResponse, error) {
+	rows, err := s.db.Query(ctx, `SELECT id, parent_id, name FROM countries WHERE deleted_at IS NULL AND is_active = TRUE AND parent_id = $1 ORDER BY (name->>'default') ASC NULLS LAST, id ASC`, parentID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	lang = strings.ToLower(strings.TrimSpace(lang))
+
+	items := make([]*country_dto.CountryActiveResponse, 0)
+
+	for rows.Next() {
+		var (
+			id        int64
+			parent    *int64
+			nameBytes []byte
+		)
+
+		if err := rows.Scan(&id, &parent, &nameBytes); err != nil {
+			return nil, err
+		}
+
+		name := unmarshalName(nameBytes)
+
+		value := ""
+
+		if lang != "" {
+			if v, ok := name[lang]; ok && strings.TrimSpace(v) != "" {
+				value = v
+			}
+		}
+
+		if value == "" {
+			value = strings.TrimSpace(name["default"])
+		}
+
+		items = append(items, &country_dto.CountryActiveResponse{ID: id, ParentID: parent, Name: value})
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return items, nil
 }
 
 func (s *countryService) List(ctx context.Context, f country_dto.CountryFilter, q helper.AdminListQuery) ([]*country_dto.CountryResponse, bool, error) {

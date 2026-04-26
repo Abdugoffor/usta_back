@@ -9,6 +9,7 @@ import (
 	categorya_service "main_service/module/categorya_service/service"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/julienschmidt/httprouter"
@@ -35,6 +36,30 @@ func NewCategoryHandler(router *httprouter.Router, group string, db *pgxpool.Poo
 	}
 
 	router.GET(group+"/count/categories", middleware.CheckRole(h.Count, "admin"))
+
+	router.GET(group+"/active/categories", h.ListActive)
+}
+
+// ListActive godoc
+// @Summary      Faol kategoriyalar ro'yxati (public, til bo'yicha)
+// @Description  lang berilgan tildagi nomni qaytaradi; bo'lmasa default
+// @Tags         Categories
+// @Produce      json
+// @Param        lang query string false "Til kodi (masalan: uz, ru, en)"
+// @Success      200 {object} map[string]any
+// @Router       /active/categories [get]
+func (h *categoryHandler) ListActive(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	lang := strings.ToLower(strings.TrimSpace(r.URL.Query().Get("lang")))
+
+	items, err := h.service.ListActive(r.Context(), lang)
+
+	if err != nil {
+		helper.WriteInternalError(w, err)
+
+		return
+	}
+
+	helper.WriteJSON(w, http.StatusOK, map[string]any{"data": items})
 }
 
 func (h *categoryHandler) checkActiveLangs(ctx context.Context, name map[string]string) (map[string]string, error) {
