@@ -2452,6 +2452,30 @@ paths:
       summary: Vakansiyalar ro'yxati (cursor pagination, public)
       tags:
       - Vacancies
+  /vacancies-client/{slug}:
+    get:
+      parameters:
+      - description: Vacancy slug
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/vacancy_dto.VacancyResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Vakansiyani slug bo'yicha olish (public)
+      tags:
+      - Vacancies
   /vacancies/{id}:
     delete:
       parameters:
@@ -2529,30 +2553,6 @@ paths:
       security:
       - BearerAuth: []
       summary: Vakansiyani yangilash (egasi yoki admin)
-      tags:
-      - Vacancies
-  /vacancies/{slug}:
-    get:
-      parameters:
-      - description: Vacancy slug
-        in: path
-        name: slug
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/vacancy_dto.VacancyResponse'
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Vakansiyani slug bo'yicha olish (public)
       tags:
       - Vacancies
 securityDefinitions:

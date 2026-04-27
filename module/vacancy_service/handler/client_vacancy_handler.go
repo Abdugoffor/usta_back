@@ -102,7 +102,7 @@ func (h *clientVacancyHandler) List(w http.ResponseWriter, r *http.Request, _ ht
 // @Param        slug path string true "Vacancy slug"
 // @Success      200 {object} vacancy_dto.VacancyResponse
 // @Failure      404 {object} map[string]string
-// @Router       /vacancies/{slug} [get]
+// @Router       /vacancies-client/{slug} [get]
 func (h *clientVacancyHandler) GetBySlug(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	slug := ps.ByName("slug")
 

@@ -9,4 +9,5 @@ import (
 
 func Cmd(router *httprouter.Router, db *pgxpool.Pool) {
 	vacancy_handler.NewVacancyHandler(router, "/api/v1", db)
+	vacancy_handler.NewClientVacancyHandler(router, "/api/v1", db)
 }

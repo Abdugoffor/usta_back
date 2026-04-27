@@ -2850,6 +2850,43 @@ const docTemplate = `{
                 }
             }
         },
+        "/vacancies-client/{slug}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Vacancies"
+                ],
+                "summary": "Vakansiyani slug bo'yicha olish (public)",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Vacancy slug",
+                        "name": "slug",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/vacancy_dto.VacancyResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/vacancies/{id}": {
             "put": {
                 "security": [
@@ -2959,43 +2996,6 @@ const docTemplate = `{
                             "additionalProperties": {
                                 "type": "string"
                             }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/vacancies/{slug}": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Vacancies"
-                ],
-                "summary": "Vakansiyani slug bo'yicha olish (public)",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Vacancy slug",
-                        "name": "slug",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/vacancy_dto.VacancyResponse"
                         }
                     },
                     "404": {
