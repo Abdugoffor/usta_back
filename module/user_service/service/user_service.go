@@ -56,19 +56,13 @@ func (s *userService) Register(ctx context.Context, req user_dto.RegisterRequest
 		return nil, err
 	}
 
-	role := "user"
-
-	if req.Role != "" {
-		role = req.Role
-	}
-
 	var (
 		user     user_model.User
 		password string
 	)
 
 	err = s.db.QueryRow(ctx, `INSERT INTO users (full_name, phone, password, role) VALUES ($1, $2, $3, $4) RETURNING id, full_name, photo, phone, password, role, is_active, created_at, updated_at, deleted_at`,
-		req.FullName, req.Phone, string(hash), role,
+		req.FullName, req.Phone, string(hash), "user",
 	).Scan(
 		&user.ID, &user.FullName, &user.Photo, &user.Phone, &password,
 		&user.Role, &user.IsActive, &user.CreatedAt, &user.UpdatedAt, &user.DeletedAt,
