@@ -56,19 +56,13 @@ func (s *userService) Register(ctx context.Context, req user_dto.RegisterRequest
 		return nil, err
 	}
 
-	role := "user"
-
-	if req.Role != "" {
-		role = req.Role
-	}
-
 	var (
 		user     user_model.User
 		password string
 	)
 
-	err = s.db.QueryRow(ctx, `INSERT INTO users (full_name, phone, password, role) VALUES ($1, $2, $3, $4) RETURNING id, full_name, photo, phone, password, role, is_active, created_at, updated_at, deleted_at`,
-		req.FullName, req.Phone, string(hash), role,
+	err = s.db.QueryRow(ctx, `INSERT INTO users (full_name, phone, password, role) VALUES ($1, $2, $3, $4) RETURNING id, full_name, photo, COALESCE(phone, ''), COALESCE(password, ''), role, is_active, created_at, updated_at, deleted_at`,
+		req.FullName, req.Phone, string(hash), "user",
 	).Scan(
 		&user.ID, &user.FullName, &user.Photo, &user.Phone, &password,
 		&user.Role, &user.IsActive, &user.CreatedAt, &user.UpdatedAt, &user.DeletedAt,
@@ -93,7 +87,7 @@ func (s *userService) Login(ctx context.Context, req user_dto.LoginRequest) (*us
 		password string
 	)
 
-	err := s.db.QueryRow(ctx, `SELECT id, full_name, photo, phone, password, role, is_active, created_at, updated_at, deleted_at FROM users WHERE phone = $1 AND deleted_at IS NULL`,
+	err := s.db.QueryRow(ctx, `SELECT id, full_name, photo, COALESCE(phone, ''), COALESCE(password, ''), role, is_active, created_at, updated_at, deleted_at FROM users WHERE phone = $1 AND deleted_at IS NULL`,
 		req.Phone,
 	).Scan(
 		&user.ID, &user.FullName, &user.Photo, &user.Phone, &password,
@@ -142,7 +136,7 @@ func (s *userService) Create(ctx context.Context, req user_dto.CreateUserRequest
 
 	var r user_dto.UserResponse
 
-	err = s.db.QueryRow(ctx, `INSERT INTO users (full_name, phone, photo, password, role, is_active) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, full_name, photo, phone, role, is_active, created_at, updated_at`,
+	err = s.db.QueryRow(ctx, `INSERT INTO users (full_name, phone, photo, password, role, is_active) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, full_name, photo, COALESCE(phone, ''), role, is_active, created_at, updated_at`,
 		strings.TrimSpace(req.FullName), strings.TrimSpace(req.Phone), req.Photo, string(hash), role, isActive,
 	).Scan(&r.ID, &r.FullName, &r.Photo, &r.Phone, &r.Role, &r.IsActive, &r.CreatedAt, &r.UpdatedAt)
 
@@ -156,7 +150,7 @@ func (s *userService) Create(ctx context.Context, req user_dto.CreateUserRequest
 func (s *userService) Show(ctx context.Context, id int64) (*user_dto.UserResponse, error) {
 	var r user_dto.UserResponse
 
-	err := s.db.QueryRow(ctx, `SELECT id, full_name, photo, phone, role, is_active, created_at, updated_at FROM users WHERE id = $1 AND deleted_at IS NULL`,
+	err := s.db.QueryRow(ctx, `SELECT id, full_name, photo, COALESCE(phone, ''), role, is_active, created_at, updated_at FROM users WHERE id = $1 AND deleted_at IS NULL`,
 		id,
 	).Scan(&r.ID, &r.FullName, &r.Photo, &r.Phone, &r.Role, &r.IsActive, &r.CreatedAt, &r.UpdatedAt)
 
@@ -204,7 +198,7 @@ func (s *userService) Update(ctx context.Context, id int64, req user_dto.UpdateU
 
 	var r user_dto.UserResponse
 
-	err := s.db.QueryRow(ctx, `UPDATE users SET full_name = COALESCE($1::varchar, full_name), phone = COALESCE($2::varchar, phone), photo = COALESCE($3::varchar, photo), password = COALESCE($4::text, password), role = COALESCE($5::varchar, role), is_active = COALESCE($6::boolean, is_active), updated_at = NOW() WHERE id = $7 AND deleted_at IS NULL RETURNING id, full_name, photo, phone, role, is_active, created_at, updated_at`,
+	err := s.db.QueryRow(ctx, `UPDATE users SET full_name = COALESCE($1::varchar, full_name), phone = COALESCE($2::varchar, phone), photo = COALESCE($3::varchar, photo), password = COALESCE($4::text, password), role = COALESCE($5::varchar, role), is_active = COALESCE($6::boolean, is_active), updated_at = NOW() WHERE id = $7 AND deleted_at IS NULL RETURNING id, full_name, photo, COALESCE(phone, ''), role, is_active, created_at, updated_at`,
 		fullName, phone, photo, password, role, req.IsActive, id,
 	).Scan(&r.ID, &r.FullName, &r.Photo, &r.Phone, &r.Role, &r.IsActive, &r.CreatedAt, &r.UpdatedAt)
 
@@ -268,7 +262,7 @@ func (s *userService) List(ctx context.Context, f user_dto.UserFilter, q helper.
 
 	args = append(args, q.Limit+1)
 
-	rows, err := s.db.Query(ctx, fmt.Sprintf(`SELECT id, full_name, photo, phone, role, is_active, created_at, updated_at FROM (SELECT u.id, u.full_name, u.photo, u.phone, u.role, u.is_active, u.created_at, u.updated_at FROM users u WHERE %s) u WHERE %s ORDER BY %s %s, id %s LIMIT $%d`,
+	rows, err := s.db.Query(ctx, fmt.Sprintf(`SELECT id, full_name, photo, phone, role, is_active, created_at, updated_at FROM (SELECT u.id, u.full_name, u.photo, COALESCE(u.phone, '') AS phone, u.role, u.is_active, u.created_at, u.updated_at FROM users u WHERE %s) u WHERE %s ORDER BY %s %s, id %s LIMIT $%d`,
 		userListWhere, cursorSQL, spec.Col, orderDir, orderDir, len(args),
 	), args...)
 

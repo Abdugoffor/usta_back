@@ -23,6 +23,7 @@ import (
 	country_cmd "main_service/module/country_service"
 	language_cmd "main_service/module/language_service"
 	resume_cmd "main_service/module/resume_service"
+	telegram_auth_cmd "main_service/module/telegram_auth_service"
 	translations_cmd "main_service/module/translations_service"
 	upload_cmd "main_service/module/upload_service"
 	user_cmd "main_service/module/user_service"
@@ -77,6 +78,8 @@ func main() {
 		resume_cmd.Cmd(router, db)
 
 		comment_cmd.Cmd(router, db)
+
+		telegram_auth_cmd.Cmd(router, db)
 
 		upload_cmd.Cmd(router)
 	}
