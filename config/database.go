@@ -61,7 +61,7 @@ func DBConnect() *pgxpool.Pool {
 
 	RunMigrations() // agar kerak bo‘lsa qo‘shamiz
 
-	// SeedVacanciesAndResumes()
+	SeedVacanciesAndResumes()
 
 	return db
 }
