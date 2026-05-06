@@ -85,7 +85,7 @@ func main() {
 	handler := middleware.SecurityHeaders(
 		middleware.CORS(
 			middleware.RateLimit(30, 60)(
-				http.MaxBytesHandler(router, 4<<20),
+				http.MaxBytesHandler(router, 25<<20),
 			),
 		),
 	)

@@ -8,11 +8,11 @@ type CreateVacancyRequest struct {
 	RegionID    *int64  `json:"region_id" validate:"omitempty,min=1"`
 	DistrictID  *int64  `json:"district_id" validate:"omitempty,min=1"`
 	MahallaID   *int64  `json:"mahalla_id" validate:"omitempty,min=1"`
-	Adress      string  `json:"adress" validate:"required,min=3,max=500"`
-	Name        string  `json:"name" validate:"required,min=2,max=255"`
-	Title       string  `json:"title" validate:"required,min=2,max=500"`
-	Text        string  `json:"text" validate:"required,min=10"`
-	Contact     string  `json:"contact" validate:"required,min=5,max=255"`
+	Adress      string  `json:"adress" validate:"omitempty,max=500"`
+	Name        string  `json:"name" validate:"omitempty,max=255"`
+	Title       string  `json:"title" validate:"omitempty,max=500"`
+	Text        string  `json:"text" validate:"omitempty"`
+	Contact     string  `json:"contact" validate:"omitempty,max=255"`
 	Price       *int64  `json:"price"`
 	IsActive    *bool   `json:"is_active"`
 	CategoryIDs []int64 `json:"category_ids" validate:"omitempty,dive,min=1"`
@@ -22,11 +22,11 @@ type UpdateVacancyRequest struct {
 	RegionID    *int64  `json:"region_id" validate:"omitempty,min=1"`
 	DistrictID  *int64  `json:"district_id" validate:"omitempty,min=1"`
 	MahallaID   *int64  `json:"mahalla_id" validate:"omitempty,min=1"`
-	Adress      *string `json:"adress" validate:"omitempty,min=3,max=500"`
-	Name        *string `json:"name" validate:"omitempty,min=2,max=255"`
-	Title       *string `json:"title" validate:"omitempty,min=2,max=500"`
-	Text        *string `json:"text" validate:"omitempty,min=10"`
-	Contact     *string `json:"contact" validate:"omitempty,min=5,max=255"`
+	Adress      *string `json:"adress" validate:"omitempty,max=500"`
+	Name        *string `json:"name" validate:"omitempty,max=255"`
+	Title       *string `json:"title" validate:"omitempty,max=500"`
+	Text        *string `json:"text" validate:"omitempty"`
+	Contact     *string `json:"contact" validate:"omitempty,max=255"`
 	Price       *int64  `json:"price"`
 	IsActive    *bool   `json:"is_active"`
 	CategoryIDs []int64 `json:"category_ids" validate:"omitempty,dive,min=1"`

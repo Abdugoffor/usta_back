@@ -3,6 +3,7 @@ package upload_handler
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"io"
 	"main_service/helper"
@@ -14,7 +15,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-const maxUploadSize = 3 << 20 // 3 MB
+const maxUploadSize = 20 << 20 // 20 MB
 
 var allowedMIME = map[string]string{
 	"image/jpeg": ".jpg",
@@ -30,7 +31,12 @@ func NewUploadHandler(router *httprouter.Router, group string) {
 func upload(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	r.Body = http.MaxBytesReader(w, r.Body, maxUploadSize)
 	if err := r.ParseMultipartForm(maxUploadSize); err != nil {
-		helper.WriteError(w, http.StatusBadRequest, "fayl hajmi 3MB dan oshmasligi kerak")
+		var maxErr *http.MaxBytesError
+		if errors.As(err, &maxErr) {
+			helper.WriteError(w, http.StatusRequestEntityTooLarge, "fayl hajmi 20MB dan oshmasligi kerak")
+			return
+		}
+		helper.WriteError(w, http.StatusBadRequest, "yuborilgan ma'lumot multipart/form-data emas: "+err.Error())
 		return
 	}
 
